@@ -10,6 +10,20 @@ export interface GameSession {
 
 export type GameSessionDocument = GameSession & Document;
 
+@Schema()
+export class QuestionSchema {
+  @Prop({ required: true })
+  questionText: string;
+
+  @Prop({ type: [String], required: true })
+  options: string[];
+
+  @Prop({ required: true })
+  correctOptionIndex: number;
+}
+export const QuestionSchemaFactory =
+  SchemaFactory.createForClass(QuestionSchema);
+
 @Schema({ timestamps: true })
 export class GameSession {
   @Prop({ required: true, default: uuidv4 })
@@ -19,13 +33,13 @@ export class GameSession {
   player1: string;
 
   @Prop()
-  player2?: string; // Initially undefined, assigned when matched.
+  player2?: string;
 
-  @Prop({ default: 'waiting' }) // waiting, active, completed
+  @Prop({ default: 'waiting' })
   status: string;
 
-  @Prop({ type: [String], default: [] }) // Store question IDs
-  questions: string[];
+  @Prop({ type: [QuestionSchemaFactory], required: true })
+  questions: QuestionSchema[];
 
   @Prop({ default: 0 })
   currentQuestionIndex: number;

@@ -23,7 +23,6 @@ export class GameService {
     private questionModel: Model<QuestionDocument>,
   ) {}
 
-  // ✅ Create or Join a Session
   async createSession(playerId: string) {
     const questions = await this.questionModel.find().limit(5).exec();
     const waitingSession = await this.gameSessionModel.findOne({
@@ -38,6 +37,7 @@ export class GameService {
       return waitingSession;
     }
 
+    // Store questions as objects
     const session = new this.gameSessionModel({
       player1: playerId,
       questions: questions.map((q) => ({
