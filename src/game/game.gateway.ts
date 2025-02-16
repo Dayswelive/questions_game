@@ -43,14 +43,13 @@ export class GameGateway
   // ✅ Start the Game and Send First Question
   @SubscribeMessage('startGame')
   async handleStartGame(client: Socket, payload: any) {
-    const { session_id } = payload;
+    const { playerId } = payload;
+    const gameSession = await this.gameService.createSession(playerId);
 
-    const firstQuestion = await this.gameService.startGame(session_id);
-
-    if (firstQuestion) {
-      this.server.to(session_id).emit('question:send', firstQuestion);
-    } else {
-      client.emit('error', 'No questions available');
+    // Notify both players
+    this.server.to(gameSession.player1).emit('game:init', gameSession);
+    if (gameSession.player2) {
+      this.server.to(gameSession.player2).emit('game:init', gameSession);
     }
   }
 
