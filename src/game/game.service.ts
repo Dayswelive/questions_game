@@ -63,7 +63,7 @@ export class GameService {
     return gameSession;
   }
 
-  // ✅ Start Game and Fetch First Question
+  // Start Game and Fetch First Question
   async startGame(sessionId: string) {
     const session = await this.getSessionById(sessionId);
     if (!session.questions.length) {
@@ -72,10 +72,10 @@ export class GameService {
 
     session.currentQuestionIndex = 0;
     await session.save();
-    return session.questions[session.currentQuestionIndex]; // Send first question
+    return session.questions[session.currentQuestionIndex];
   }
 
-  // ✅ Submit Answer
+  // Submit Answer
 
   async submitAnswer(sessionId: string, playerId: string, answer: string) {
     const session = await this.gameSessionModel.findById(sessionId);
@@ -107,7 +107,7 @@ export class GameService {
 
     return { message: 'Answer submitted successfully', isCorrect };
   }
-  // ✅ Check if both players have answered
+  // Check if both players have answered
   async allPlayersAnswered(sessionId: string) {
     const session = await this.getSessionById(sessionId);
     const { player1, player2, currentQuestionIndex, answers } = session;
@@ -124,7 +124,7 @@ export class GameService {
     return player1Answered && player2Answered;
   }
 
-  // ✅ Fetch Next Question
+  // Fetch Next Question
   async getNextQuestion(sessionId: string) {
     const session = await this.getSessionById(sessionId);
 
@@ -132,13 +132,13 @@ export class GameService {
     await session.save();
 
     if (session.currentQuestionIndex >= session.questions.length) {
-      return null; // No more questions
+      return null;
     }
 
     return session.questions[session.currentQuestionIndex];
   }
 
-  // ✅ Determine Game Winner
+  // Determine Game Winner
   async calculateGameResult(sessionId: string) {
     const session = await this.getSessionById(sessionId);
     const { player1, player2, answers } = session;
