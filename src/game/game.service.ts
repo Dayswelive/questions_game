@@ -1,10 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { NotFoundException } from '@nestjs/common';
 import {
   GameSession,
   GameSessionDocument,
 } from './schemas/game-session.schema';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class GameService {
@@ -39,5 +41,14 @@ export class GameService {
 
   async getSessionById(sessionId: string) {
     return this.gameSessionModel.findById(sessionId);
+  }
+
+  async submitAnswer(sessionId: string, playerId: string, answer: string) {
+    const session = await this.gameSessionModel.findById(sessionId);
+    if (!session) throw new NotFoundException('Session not found');
+
+    session.answers.push({ playerId, answer });
+    await session.save();
+    return { message: 'Answer submitted successfully' };
   }
 }

@@ -20,4 +20,17 @@ export class QuestionController {
   async findOne(@Param('id') id: string) {
     return this.questionService.findOne(id);
   }
+
+  @Post(':id/submit')
+  async submitAnswer(
+    @Param('id') id: string,
+    @Body() body: { userAnswer: string },
+  ) {
+    return this.questionService.submitAnswer(id, body.userAnswer);
+  }
+
+  @Get('filter/:topic')
+  async getQuestionsByTopic(@Param('topic') topic: string) {
+    return this.questionService.findByTopic(topic);
+  }
 }

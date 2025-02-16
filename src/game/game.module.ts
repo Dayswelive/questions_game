@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { GameGateway } from './game.gateway';
+import { GameController } from './game.controller';
 import { GameService } from './game.service';
 import { GameSession, GameSessionSchema } from './schemas/game-session.schema';
 
@@ -10,6 +11,7 @@ import { GameSession, GameSessionSchema } from './schemas/game-session.schema';
       { name: GameSession.name, schema: GameSessionSchema },
     ]),
   ],
+  controllers: [GameController],
   providers: [GameService, GameGateway],
   exports: [GameService],
 })
